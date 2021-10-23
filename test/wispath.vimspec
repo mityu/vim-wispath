@@ -190,4 +190,28 @@ Describe wispath#getCompletion()
     endtry
   End
 
+  It lists completion list 9
+    let $TEST_THIS_DIR = '.'
+
+    let candidates = [
+          \ 'dummydir/', 'sampledir/', 'dummyfile.txt', 'fileA.txt', 'fileA.vim'
+          \]
+    call CompareCandidates(GetCompletion('$TEST_THIS_DIR/'), [16, candidates])
+  End
+
+  It lists completion list 10
+    let files = glob('~/*')->split("\n")
+    if empty(files)
+      call g:assert.skip('No files under ~/')
+    endif
+    let candidates = []
+    for f in files
+      call add(candidates, fnamemodify(f, ':t'))
+      if isdirectory(f)
+        let candidates[-1] .= '/'
+      endif
+    endfor
+    call CompareCandidates(GetCompletion('~/'), [3, candidates])
+  End
+
 End
