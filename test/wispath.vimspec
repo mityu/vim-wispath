@@ -1,0 +1,193 @@
+let g:funcs = wispath#_internal_funcs()
+let g:thisfile = expand('<sfile>')
+call themis#func_alias(g:funcs)
+
+Describe EvalInAlterWin()
+  Before all
+    enew
+  End
+
+  It evaluates given function in the alternative window
+    let F = {-> 15}
+    Assert Equals(F(), g:funcs.EvalInAlterWin(F))
+  End
+End
+
+Describe ExtractTargetPath()
+  It extracts target path
+    Assert Equals('target/path', g:funcs.ExtractTargetPath('target/path'))
+    Assert Equals('target/path', g:funcs.ExtractTargetPath('hoge target/path'))
+    Assert Equals('target/path', g:funcs.ExtractTargetPath('set opt=target/path'))
+    Assert Equals('target/path', g:funcs.ExtractTargetPath('var = "target/path'))
+    Assert Equals('target/path', g:funcs.ExtractTargetPath("var = 'target/path"))
+  End
+End
+
+Describe ExpandEnviron()
+  Before all
+    let $TEST_WISPATH_1 = 'one'
+    let $TEST_WISPATH_2 = 'two'
+  End
+
+  Context not in cmdwin
+    Before all
+      function ExpandEnviron(line)
+        return g:funcs.ExpandEnviron(a:line, 0)
+      endfunction
+    End
+
+    After all
+      delfunction ExpandEnviron
+    End
+
+    It expands environmental variables
+      Assert Equals('one', ExpandEnviron('$TEST_WISPATH_1'))
+      Assert Equals('onetwo', ExpandEnviron('$TEST_WISPATH_1$TEST_WISPATH_2'))
+      Assert Equals('one/two', ExpandEnviron('$TEST_WISPATH_1/$TEST_WISPATH_2'))
+      Assert Equals('foo/one', ExpandEnviron('foo/$TEST_WISPATH_1'))
+    End
+
+    It does not expand env-vars when they're escaped
+      Assert Equals('\$TEST_WISPATH_1', ExpandEnviron('\$TEST_WISPATH_1'))
+      Assert Equals('\\one', ExpandEnviron('\\$TEST_WISPATH_1'))
+      Assert Equals('\\\$TEST_WISPATH_1', ExpandEnviron('\\\$TEST_WISPATH_1'))
+    End
+
+    It does not expand filename-modifiers
+      Assert Equals(ExpandEnviron('%'), '%')
+    End
+  End
+
+  Context in cmdwin
+    Before all
+      function ExpandEnviron(src)
+        return g:funcs.ExpandEnviron(a:src, 1)
+      endfunction
+
+      function CurrentFile()
+        return fnamemodify(fnamemodify(g:thisfile, ':h'), ':p') . 'aaa.txt'
+      endfunction
+
+      execute 'edit' CurrentFile()
+    End
+
+    After all
+      delfunction ExpandEnviron
+      delfunction CurrentFile
+    End
+
+    It expands filename-modifiers
+      Assert Equals(ExpandEnviron('%'), CurrentFile())
+      Assert Equals(ExpandEnviron('%:h/'), fnamemodify(CurrentFile(), ':h') .. '/')
+      Assert Equals(ExpandEnviron('%:r'), fnamemodify(CurrentFile(), ':r'))
+      Assert Equals(ExpandEnviron('%:t:s?a?b?'),
+            \ substitute(fnamemodify(CurrentFile(), ':t'), 'a', 'b', ''))
+      Assert Equals(ExpandEnviron('%:t:gs?a?b?'),
+            \ substitute(fnamemodify(CurrentFile(), ':t'), 'a', 'b', 'g'))
+      Assert Equals(ExpandEnviron('%:t:s?a?b?suffix'),
+            \ substitute(fnamemodify(CurrentFile(), ':t'), 'a', 'b', '') .. 'suffix')
+      Assert Equals(ExpandEnviron('%:t:gs?a?b?suffix'),
+            \ substitute(fnamemodify(CurrentFile(), ':t'), 'a', 'b', 'g') .. 'suffix')
+    End
+  End
+End
+
+Describe wispath#getCompletion()
+  Before all
+    let plugindir = ''
+    for p in split(&runtimepath, ',')
+      if stridx(p, 'wispath') != -1
+        let plugindir = p
+        break
+      endif
+    endfor
+    execute 'cd' plugindir
+    cd test/testdirs
+
+    function GetCompletion(line)
+      return wispath#getCompletion(a:line, strlen(a:line) + 1, 0)
+    endfunction
+
+    function CompareCandidates(got, expected)
+      if empty(a:got) || empty(a:expected)
+        call g:assert.equals(a:got, a:expected)
+        return
+      endif
+      call g:assert.equals(a:got[1]->mapnew({-> v:val.word})->sort(),
+            \ a:expected[1]->sort(),
+            \ 'The candidates are not equal')
+      call g:assert.equals(a:got[0], a:expected[0], 'The columns are not equal')
+    endfunction
+  End
+
+  After all
+    delfunction GetCompletion
+    delfunction CompareCandidates
+  End
+
+  It lists completion list 1
+    let candidates = [
+          \ 'dummydir/', 'sampledir/', 'dummyfile.txt', 'fileA.txt', 'fileA.vim'
+          \]
+    call CompareCandidates(GetCompletion(''), [1, candidates])
+  End
+
+  It lists completion list 2
+    let candidates = [
+          \ 'fileA.txt', 'fileA.vim'
+          \]
+    call CompareCandidates(GetCompletion('f'), [1, candidates])
+    call CompareCandidates(GetCompletion('./f'), [3, candidates])
+  End
+
+  It lists completion list 3
+    let candidates = [
+          \ 'fileA.txt', 'dummyfile.txt'
+          \]
+    call CompareCandidates(GetCompletion('*.txt'), [1, candidates])
+    call CompareCandidates(GetCompletion('./*.txt'), [3, candidates])
+  End
+
+  It lists completion list 4
+    let candidates = [
+          \ 'dummydir/fileA.txt', 'sampledir/fileA.txt'
+          \]
+    call CompareCandidates(GetCompletion('*/*.txt'), [1, candidates])
+    call CompareCandidates(GetCompletion('./*/*.txt'), [3, candidates])
+  End
+
+  It lists completion list 5
+    let candidates = [
+          \ 'dummyfile.txt', 'fileA.txt', 'dummydir/fileA.txt', 'sampledir/fileA.txt'
+          \]
+    call CompareCandidates(GetCompletion('**/*.txt'), [1, candidates])
+    call CompareCandidates(GetCompletion('./**/*.txt'), [3, candidates])
+  End
+
+  It lists completion list 6
+    let candidates = [
+          \ 'dummydir/fileA.txt'
+          \]
+    call CompareCandidates(GetCompletion('d*/'), [1, candidates])
+  End
+
+  It lists completion list 7
+    let candidates = [
+          \ 'fileA.txt'
+          \]
+    call CompareCandidates(GetCompletion('dummydir/'), [10, candidates])
+  End
+
+  It lists completion list 8
+    cd sampledir
+    try
+      let candidates = [
+            \ 'dummydir/', 'sampledir/', 'dummyfile.txt', 'fileA.txt', 'fileA.vim'
+            \]
+      call CompareCandidates(GetCompletion('../'), [4, candidates])
+    finally
+      cd ../
+    endtry
+  End
+
+End
