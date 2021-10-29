@@ -113,6 +113,10 @@ Describe wispath#getCompletion()
         call g:assert.equals(a:got, a:expected)
         return
       endif
+      let sep = fnamemodify(getcwd(), ':p')[-1 :]
+      if sep !=# '/'
+        call map(a:expected[1], {-> substitute(v:val, '/$', sep, 'g')})
+      endif
       call g:assert.equals(a:got[1]->mapnew({-> v:val.word})->sort(),
             \ a:expected[1]->sort(),
             \ 'The candidates are not equal')
