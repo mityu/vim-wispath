@@ -115,7 +115,7 @@ Describe wispath#getCompletion()
       endif
       let sep = fnamemodify(getcwd(), ':p')[-1 :]
       if sep !=# '/'
-        call map(a:expected[1], {-> substitute(v:val, '/$', sep, 'g')})
+        call map(a:expected[1], {-> substitute(v:val, '/', sep, 'g')})
       endif
       call g:assert.equals(a:got[1]->mapnew({-> v:val.word})->sort(),
             \ a:expected[1]->sort(),
