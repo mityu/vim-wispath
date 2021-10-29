@@ -96,13 +96,13 @@ Describe wispath#getCompletion()
   Before all
     let plugindir = ''
     for p in split(&runtimepath, ',')
-      if stridx(p, 'wispath') != -1
+      if p =~# 'wispath\_[\/]\?$'
         let plugindir = p
         break
       endif
     endfor
     execute 'cd' plugindir
-    cd test/testdirs
+    cd ./test/testdirs
 
     function GetCompletion(line)
       return wispath#getCompletion(a:line, strlen(a:line) + 1, 0)
