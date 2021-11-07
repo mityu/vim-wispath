@@ -89,8 +89,13 @@ export def wispath#getCompletion(target_path: string, cursor_col: number, in_cmd
     var dir = ExpandEnviron(dir_buffer, in_cmdline)
     while true
       if stridx(completions[0], dir) == 0
-        truncate_len = strlen(dir) + 1
-        truncate_len_buffer = strlen(dir_buffer) + 1
+        if dir == '/'
+          truncate_len = 1
+          truncate_len_buffer = 1
+        else
+          truncate_len = strlen(dir) + 1
+          truncate_len_buffer = strlen(dir_buffer) + 1
+        endif
         break
       elseif fnamemodify(dir_buffer, ':t') ==# dir_buffer
         truncate_len = 0
