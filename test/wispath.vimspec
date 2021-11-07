@@ -218,4 +218,26 @@ Describe wispath#getCompletion()
     call CompareCandidates(GetCompletion('~/'), [3, candidates])
   End
 
+  It lists completions of hidden files
+    let candidates = [
+          \ './', '../', '.hiddenfile'
+          \ ]
+    call CompareCandidates(GetCompletion('.'), [1, candidates])
+  End
+
+  It lists completions of the root directory when on Unix
+    if !has('unix')
+      Assert Skip('Not on unix')
+    endif
+    let files = glob('/*')->split("\n")
+    let candidates = []
+    for f in files
+      call add(candidates, fnamemodify(f, ':t'))
+      if isdirectory(f)
+        let candidates[-1] .= '/'
+      endif
+    endfor
+    call CompareCandidates(GetCompletion('/'), [2, candidates])
+  End
+
 End
