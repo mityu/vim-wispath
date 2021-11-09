@@ -1,0 +1,49 @@
+*wispath.txt*	Path completion plugin for Vim9 (Experimental)
+
+Author: mityu
+License: MIT License
+
+==============================================================================
+CONTENTS                                                  *wispath-contents*
+
+INTRODUCTION					|widpath-introduction|
+REQUIREMENTS					|widpath-requirements|
+MAPPINGS					|wispath-mappings|
+EXAMPLES					|widpath-examples|
+
+
+
+==============================================================================
+INTRODUCTION						*widpath-introduction*
+
+*wispath* is a Vim plugin to complete file paths like |i_CTRL-X_CTRL-F|.
+
+
+==============================================================================
+REQUIREMENTS						*widpath-requirements*
+
+The latest version of Vim. Since this plugin is written in |Vim9-script|, this
+plugin does not work on NeoVim.
+
+
+==============================================================================
+MAPPINGS						*wispath-mappings*
+						*<Plug>(wispath-complete)*
+<Plug>(wispath-complete)			 (Defined in insert mode)
+	Show completion menu and complete files and directories.
+	The completion menu is shown via |complete()|.
+	Note that this plugin does not respect 'isfname', that is different
+	from the built-in |i_CTRL-X_CTRL-F|. Maybe this plugin will respect
+	'isfname' in the future, but I don't know whether I'll implement it or
+	not.
+
+
+==============================================================================
+EXAMPLES						*widpath-examples*
+
+Example configration: >
+	imap <C-x><C-f> <Plug>(wispath-complete)
+<
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
