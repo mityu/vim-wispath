@@ -31,8 +31,43 @@ MAPPINGS						*wispath-mappings*
 						*<Plug>(wispath-complete)*
 <Plug>(wispath-complete)			 (Defined in insert mode)
 	Show completion menu and complete files and directories.
-	The completion menu is shown via |complete()|.
-	Note that this plugin does not respect 'isfname', that is different
+	The completion menu is shown via |complete()|. Example: >
+		path/to/this/plugin/
+				   +----------------+
+				   |autoload/ [dir] |
+				   |doc/      {dir] |
+				   |plugin/   [dir] |
+				   |test/     [dir] |
+				   |README.md [file]|
+				   +----------------+
+<
+	This plugin uses |glob()| function to list files, so you can use
+	|wildcards| to restrict completion candidates. Examples: >
+		path/to/this/plugin/*.md
+				   +----------------+
+				   |README.md [file]|
+				   +----------------+
+
+		path/to/this/plugin/**/wispath.vim
+				   +---------------------------+
+				   |autoload/wispath.vim [file]|
+				   |plugin/wispath.vim   [file]|
+				   |test/wispath.vimspec [file]|
+				   +---------------------------+
+<
+	In addition, when you're in |cmdwin|, this plugin recognizes
+	|filename-modifiers|. Example: >
+	(When the current buffer is this doc opened by :edit, not by :help)
+		%:p:h:h/
+		       +----------------+
+		       |autoload/ [dir] |
+		       |doc/      {dir] |
+		       |plugin/   [dir] |
+		       |test/     [dir] |
+		       |README.md [file]|
+		       +----------------+
+<
+	Note: This plugin does not respect 'isfname', that is different
 	from the built-in |i_CTRL-X_CTRL-F|. Maybe this plugin will respect
 	'isfname' in the future, but I don't know whether I'll implement it or
 	not.
