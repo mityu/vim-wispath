@@ -41,8 +41,8 @@ MAPPINGS						*wispath-mappings*
 				   |README.md [file]|
 				   +----------------+
 <
-	This plugin uses |glob()| function to list files, so you can use
-	|wildcards| to restrict completion candidates. Examples: >
+	This plugin uses |getcompletion()| function to list files, so you can
+	use |wildcards| to restrict completion candidates. Examples: >
 		path/to/this/plugin/*.md
 				   +----------------+
 				   |README.md [file]|
