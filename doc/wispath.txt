@@ -76,7 +76,7 @@ MAPPINGS						*wispath-mappings*
 ==============================================================================
 EXAMPLES						*widpath-examples*
 
-Example configration: >
+Example configuration: >
 	imap <C-x><C-f> <Plug>(wispath-complete)
 <
 
