@@ -22,7 +22,7 @@ def EvalInAlterWin(F: func): any
 enddef
 
 def ExtractTargetPath(line: string): string
-  if line ==# ''
+  if trim(line) ==# ''
     return ''
   endif
   # TODO: Refer to 'isfname'?
