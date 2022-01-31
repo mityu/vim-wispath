@@ -1,4 +1,4 @@
-let g:funcs = wispath#_internal_funcs()
+let g:funcs = wispath#InternalFuncs_()
 let g:thisfile = expand('<sfile>')
 call themis#func_alias(g:funcs)
 
@@ -92,7 +92,7 @@ Describe ExpandEnviron()
   End
 End
 
-Describe wispath#getCompletion()
+Describe wispath#GetCompletion()
   Before all
     let plugindir = ''
     for p in split(&runtimepath, ',')
@@ -105,7 +105,7 @@ Describe wispath#getCompletion()
     cd ./test/testdirs
 
     function GetCompletion(line)
-      return wispath#getCompletion(a:line, strlen(a:line) + 1, 0)
+      return wispath#GetCompletion(a:line, strlen(a:line) + 1, 0)
     endfunction
 
     function CompareCandidates(got, expected)

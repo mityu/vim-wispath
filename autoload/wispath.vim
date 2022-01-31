@@ -55,7 +55,7 @@ def ExpandEnviron(src: string, in_cmdline: bool): string
 enddef
 
 
-def wispath#complete()
+export def Complete()
   if mode() !=# 'i'
     return
   endif
@@ -68,7 +68,7 @@ def wispath#complete()
   call('complete', c)
 enddef
 
-def wispath#getCompletion(target_path: string, cursor_col: number, in_cmdline: bool): list<any>
+export def GetCompletion(target_path: string, cursor_col: number, in_cmdline: bool): list<any>
   var completions: list<string>
   if IsInCmdwin()
     completions = EvalInAlterWin(function('getcompletion', [target_path, 'file']))
@@ -126,7 +126,7 @@ def wispath#getCompletion(target_path: string, cursor_col: number, in_cmdline: b
 enddef
 
 # For testing
-def wispath#_internal_funcs(): dict<func>
+export def InternalFuncs_(): dict<func>
   return {
     EvalInAlterWin: funcref('EvalInAlterWin'),
     ExtractTargetPath: funcref('ExtractTargetPath'),

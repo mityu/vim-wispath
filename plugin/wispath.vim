@@ -1,1 +1,1 @@
-inoremap <Plug>(wispath-complete) <Cmd>call wispath#complete()<CR>
+inoremap <Plug>(wispath-complete) <Cmd>call wispath#Complete()<CR>
