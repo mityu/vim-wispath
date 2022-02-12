@@ -61,7 +61,7 @@ export def Complete()
   endif
   var target_path = getline('.')->strpart(0, col('.') - 1)->ExtractTargetPath()
   var is_in_cmdline = getcmdtype() !=# '' || getcmdwintype() !=# ''
-  var c = wispath#getCompletion(target_path, col('.'), is_in_cmdline)
+  var c = wispath#GetCompletion(target_path, col('.'), is_in_cmdline)
   if empty(c)
     return
   endif
