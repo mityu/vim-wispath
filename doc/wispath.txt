@@ -1,4 +1,4 @@
-*wispath.txt*	Path completion plugin for Vim9 (Experimental)
+*wispath.txt*	Path completion plugin for Vim9
 
 Author: mityu
 License: MIT License
@@ -9,6 +9,7 @@ CONTENTS                                                  *wispath-contents*
 INTRODUCTION					|widpath-introduction|
 REQUIREMENTS					|widpath-requirements|
 MAPPINGS					|wispath-mappings|
+FUNCTIONS					|wispath-functions|
 EXAMPLES					|widpath-examples|
 
 
@@ -22,8 +23,9 @@ INTRODUCTION						*widpath-introduction*
 ==============================================================================
 REQUIREMENTS						*widpath-requirements*
 
-The latest version of Vim. Since this plugin is written in |Vim9-script|, this
-plugin does not work on NeoVim.
+ - Vim 9.0.0000+ (latest version would be better)
+
+Note that this plugin doesn't work on NeoVim since written in |Vim9-script|.
 
 
 ==============================================================================
@@ -71,6 +73,16 @@ MAPPINGS						*wispath-mappings*
 	from the built-in |i_CTRL-X_CTRL-F|. Maybe this plugin will respect
 	'isfname' in the future, but I don't know whether I'll implement it or
 	not.
+
+
+
+==============================================================================
+FUNCTIONS						*widpath-functions*
+
+wispath#Complete()					*wispath#Complete()*
+	Function version of *<Plug>(wispath-complete)* .
+	*<Plug>(wispath-complete)* is equivalent to
+	`<Cmd>call wispath#Complete()<CR>` .
 
 
 ==============================================================================
