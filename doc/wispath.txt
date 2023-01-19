@@ -41,6 +41,7 @@ MAPPINGS						*wispath-mappings*
 				   |plugin/   [dir] |
 				   |test/     [dir] |
 				   |README.md [file]|
+				   |demo.gif  [file]|
 				   +----------------+
 <
 	This plugin uses |getcompletion()| function to list files, so you can
@@ -67,6 +68,7 @@ MAPPINGS						*wispath-mappings*
 		       |plugin/   [dir] |
 		       |test/     [dir] |
 		       |README.md [file]|
+		       |demo.gif  [file]|
 		       +----------------+
 <
 	Note: This plugin does not respect 'isfname', that is different
@@ -83,6 +85,58 @@ wispath#Complete()					*wispath#Complete()*
 	Function version of *<Plug>(wispath-complete)* .
 	*<Plug>(wispath-complete)* is equivalent to
 	`<Cmd>call wispath#Complete()<CR>` .
+
+						*wispath#GetCompletion()*
+wispath#GetCompletion(
+		{path}: string, {col}: number, {cmdline}: bool): list<any>
+	Returns a |List| consist of completion information set like this form:
+	[{startcol}, {candidates}].  {startcol} is the byte offset in the line
+	where completed text starts and {candidates} is a |List| consist of
+	the completion candidates.  If no candidates found, an empty list is
+	returned.  The returned list can be applied to |complete()| directly
+	via |call()| except for when empty list is returned.
+
+	{path} is a string to find completion candidates.
+	{col} is a number and the byte offset in the line where {path} ends.
+	This is used to only calculate {startcol}.
+	{cmdline} is a boolean and if this value is true, |filename-modifiers|
+	in {path} will be taken into account.  This value should be true when
+	used in command-line or cmdwin and false otherwise.
+
+	Examples: >
+	echo wispath#GetCompletion(
+		\'path/to/this/plugin/**/wispath.vim', 35, v:false)
+	"=> [20, [
+		{'word': 'autoload/wispath.vim', 'menu': '[file]'},
+		{'word': 'plugin/wispath.vim',   'menu': '[file]'},
+		{'word': 'test/wispath.vimspec', 'menu': '[file]'}
+		]]
+
+	echo wispath#GetCompletion('path/to/this/plugin/', 22, v:false)
+	"=> [20, [
+		{'word': 'autoload/', 'menu': '[dir]'},
+		{'word': 'doc/',      'menu': '[dir]'},
+		{'word': 'plugin/',   'menu': '[dir]'},
+		{'word': 'test/',     'menu': '[dir]'},
+		{'word': 'README.md', 'menu': '[file]'},
+		{'word': 'demo.gif',  'menu': '[file]'}
+		]]
+
+	" Assume that the file on the current buffer is this doc.
+	echo wispath#GetCompletion('%:h:h/', 5, v:true)
+	"=> [5, [
+		{'word': 'autoload/', 'menu': '[dir]'},
+		{'word': 'doc/',      'menu': '[dir]'},
+		{'word': 'plugin/',   'menu': '[dir]'},
+		{'word': 'test/',     'menu': '[dir]'},
+		{'word': 'README.md', 'menu': '[file]'},
+		{'word': 'demo.gif',  'menu': '[file]'}
+		]]
+
+	" When no matches found, returns an empty list.
+	echo wispath#GetCompletion('foo/bar/baz', 12, v:false)
+	"=> []
+<
 
 
 ==============================================================================
