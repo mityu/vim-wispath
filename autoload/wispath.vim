@@ -93,7 +93,7 @@ export def GetCompletion(target_path: string, cursor_col: number, in_cmdline: bo
           truncate_len = 1
           truncate_len_buffer = 1
         else
-          truncate_len = strlen(dir) + 1
+          truncate_len = strchars(dir) + 1
           truncate_len_buffer = strlen(dir_buffer) + 1
         endif
         break
