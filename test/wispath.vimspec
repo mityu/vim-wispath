@@ -131,7 +131,8 @@ Describe wispath#GetCompletion()
 
   It lists completion list 1
     let candidates = [
-          \ 'dummydir/', 'sampledir/', 'dummyfile.txt', 'fileA.txt', 'fileA.vim'
+          \ 'dummydir/', 'sampledir/', 'いろは/',
+          \ 'dummyfile.txt', 'fileA.txt', 'fileA.vim'
           \]
     call CompareCandidates(GetCompletion(''), [1, candidates])
   End
@@ -154,7 +155,8 @@ Describe wispath#GetCompletion()
 
   It lists completion list 4
     let candidates = [
-          \ 'dummydir/fileA.txt', 'sampledir/fileA.txt'
+          \ 'dummydir/fileA.txt', 'sampledir/fileA.txt',
+          \ 'いろは/iroha.txt', 'いろは/いろは.txt'
           \]
     call CompareCandidates(GetCompletion('*/*.txt'), [1, candidates])
     call CompareCandidates(GetCompletion('./*/*.txt'), [3, candidates])
@@ -162,7 +164,8 @@ Describe wispath#GetCompletion()
 
   It lists completion list 5
     let candidates = [
-          \ 'dummyfile.txt', 'fileA.txt', 'dummydir/fileA.txt', 'sampledir/fileA.txt'
+          \ 'dummyfile.txt', 'fileA.txt', 'dummydir/fileA.txt', 'sampledir/fileA.txt',
+          \ 'いろは/iroha.txt', 'いろは/いろは.txt'
           \]
     call CompareCandidates(GetCompletion('**/*.txt'), [1, candidates])
     call CompareCandidates(GetCompletion('./**/*.txt'), [3, candidates])
@@ -186,7 +189,8 @@ Describe wispath#GetCompletion()
     cd sampledir
     try
       let candidates = [
-            \ 'dummydir/', 'sampledir/', 'dummyfile.txt', 'fileA.txt', 'fileA.vim'
+            \ 'dummydir/', 'sampledir/', 'いろは/',
+            \ 'dummyfile.txt', 'fileA.txt', 'fileA.vim'
             \]
       call CompareCandidates(GetCompletion('../'), [4, candidates])
     finally
@@ -198,7 +202,8 @@ Describe wispath#GetCompletion()
     let $TEST_THIS_DIR = '.'
 
     let candidates = [
-          \ 'dummydir/', 'sampledir/', 'dummyfile.txt', 'fileA.txt', 'fileA.vim'
+            \ 'dummydir/', 'sampledir/', 'いろは/',
+            \ 'dummyfile.txt', 'fileA.txt', 'fileA.vim'
           \]
     call CompareCandidates(GetCompletion('$TEST_THIS_DIR/'), [16, candidates])
   End
@@ -238,6 +243,13 @@ Describe wispath#GetCompletion()
       endif
     endfor
     call CompareCandidates(GetCompletion('/'), [2, candidates])
+  End
+
+  It lists completions with multibyte file/dir name 1
+    let candidates = [
+        \ 'いろは.txt', 'iroha.txt'
+        \]
+    call CompareCandidates(GetCompletion('いろは/'), [strlen('いろは/') + 1, candidates])
   End
 
 End
