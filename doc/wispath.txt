@@ -82,8 +82,8 @@ MAPPINGS						*wispath-mappings*
 FUNCTIONS						*widpath-functions*
 
 wispath#Complete()					*wispath#Complete()*
-	Function version of *<Plug>(wispath-complete)* .
-	*<Plug>(wispath-complete)* is equivalent to
+	Function version of |<Plug>(wispath-complete)| .
+	|<Plug>(wispath-complete)| is equivalent to
 	`<Cmd>call wispath#Complete()<CR>` .
 
 						*wispath#GetCompletion()*
