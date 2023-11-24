@@ -6,22 +6,22 @@ License: MIT License
 ==============================================================================
 CONTENTS                                                  *wispath-contents*
 
-INTRODUCTION					|widpath-introduction|
-REQUIREMENTS					|widpath-requirements|
+INTRODUCTION					|wispath-introduction|
+REQUIREMENTS					|wispath-requirements|
 MAPPINGS					|wispath-mappings|
 FUNCTIONS					|wispath-functions|
-EXAMPLES					|widpath-examples|
+EXAMPLES					|wispath-examples|
 
 
 
 ==============================================================================
-INTRODUCTION						*widpath-introduction*
+INTRODUCTION						*wispath-introduction*
 
 *wispath* is a Vim plugin to complete file paths like |i_CTRL-X_CTRL-F|.
 
 
 ==============================================================================
-REQUIREMENTS						*widpath-requirements*
+REQUIREMENTS						*wispath-requirements*
 
  - Vim 9.0.0000+ (latest version would be better)
 
@@ -79,7 +79,7 @@ MAPPINGS						*wispath-mappings*
 
 
 ==============================================================================
-FUNCTIONS						*widpath-functions*
+FUNCTIONS						*wispath-functions*
 
 wispath#Complete()					*wispath#Complete()*
 	Function version of |<Plug>(wispath-complete)| .
@@ -140,7 +140,7 @@ wispath#GetCompletion(
 
 
 ==============================================================================
-EXAMPLES						*widpath-examples*
+EXAMPLES						*wispath-examples*
 
 Example configuration: >
 	imap <C-x><C-f> <Plug>(wispath-complete)
