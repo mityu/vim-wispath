@@ -1,5 +1,9 @@
 name: 'Test'
-on: ['push', 'pull_request']
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: 0 12 * * 5
 
 jobs:
   test:
@@ -8,6 +12,7 @@ jobs:
       matrix:
         vim_version:
           - 'v9.0.0000'
+          - 'v9.1.0000'
           - 'head'
         platform: ['Linux', 'MacOS', 'Windows']
 
@@ -28,10 +33,10 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: 'actions/checkout@v2'
+      - uses: 'actions/checkout@v4'
       - name: 'Setup Vim'
         id: 'vim'
-        uses: 'thinca/action-setup-vim@v1'
+        uses: 'thinca/action-setup-vim@v2'
         with:
           vim_version: '${{ matrix.vim_version }}'
           download: '${{ matrix.download }}'
@@ -39,7 +44,7 @@ jobs:
         run: |
           ${{ steps.vim.outputs.executable }} --version
       - name: 'Setup themis.vim'
-        uses: 'actions/checkout@v2'
+        uses: 'actions/checkout@v4'
         with:
           repository: 'thinca/vim-themis'
           path: 'themis'
