@@ -252,4 +252,7 @@ Describe wispath#GetCompletion()
     call CompareCandidates(GetCompletion('いろは/'), [strlen('いろは/') + 1, candidates])
   End
 
+  It empty completions with target_path include `{`
+    call CompareCandidates(GetCompletion('{'), [])
+  End
 End
