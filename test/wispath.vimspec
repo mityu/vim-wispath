@@ -255,4 +255,8 @@ Describe wispath#GetCompletion()
   It empty completions with target_path include `{`
     call CompareCandidates(GetCompletion('{'), [])
   End
+
+  It empty completions with target_path include `}`
+    call CompareCandidates(GetCompletion('}'), [])
+  End
 End
