@@ -70,11 +70,16 @@ enddef
 
 export def GetCompletion(target_path: string, cursor_col: number, in_cmdline: bool): list<any>
   var completions: list<string>
-  if IsInCmdwin()
-    completions = EvalInAlterWin(function('getcompletion', [target_path, 'file']))
-  else
-    completions = getcompletion(target_path, 'file')
-  endif
+  try
+    if IsInCmdwin()
+      completions = EvalInAlterWin(function('getcompletion', [target_path, 'file']))
+    else
+      completions = getcompletion(target_path, 'file')
+    endif
+  catch /^Vim\%((\a\+)\)\=:\%(E219\|E220\):/
+    # When target_path includes `{` or `}`,
+    # Vim raise `E220: Missing }` or `E219: Missing {` exception.
+  endtry
   if empty(completions)
     return []
   endif
