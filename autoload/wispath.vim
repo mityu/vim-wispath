@@ -76,7 +76,7 @@ export def GetCompletion(target_path: string, cursor_col: number, in_cmdline: bo
     else
       completions = getcompletion(target_path, 'file')
     endif
-  catch /^Vim\%((\a\+)\)\=:\(E219\|E220\):/
+  catch /^Vim\%((\a\+)\)\=:\%(E219\|E220\):/
     # When target_path includes `{` or `}`,
     # Vim raise `E220: Missing }` or ``E219: Missing {` exception.
   endtry
