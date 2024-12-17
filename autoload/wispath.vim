@@ -85,17 +85,15 @@ export def GetCompletion(target_path: string, cursor_col: number, in_cmdline: bo
     truncate_len = 0
     truncate_len_buffer = 0
   else
-    var dir_buffer = fnamemodify(target_path, ':h')
-    var dir = ExpandEnviron(dir_buffer, in_cmdline)
+    var dir_buffer = fnamemodify(target_path, ':h')  # Directory path as is on buffer.
+    var dir = ExpandEnviron(dir_buffer, in_cmdline)  # Expanded directory path.
     while true
       if stridx(completions[0], dir) == 0
-        if dir == '/'
-          truncate_len = 1
-          truncate_len_buffer = 1
-        else
-          truncate_len = strchars(dir) + 1
-          truncate_len_buffer = strlen(dir_buffer) + 1
-        endif
+        # Additinonal truncation length for path separator.
+        const addition = fnamemodify(dir, ':t') ==# '' ? 0 : 1
+
+        truncate_len = strchars(dir) + addition
+        truncate_len_buffer = strlen(dir_buffer) + addition
         break
       elseif fnamemodify(dir_buffer, ':t') ==# dir_buffer
         truncate_len = 0
