@@ -243,6 +243,8 @@ Describe wispath#GetCompletion()
       endif
     endfor
     call CompareCandidates(GetCompletion('/'), [2, candidates])
+    call CompareCandidates(GetCompletion('//'), [3, candidates])
+    call CompareCandidates(GetCompletion('///'), [4, candidates])
   End
 
   It lists completions with multibyte file/dir name 1
